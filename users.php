@@ -2,7 +2,6 @@
     require_once('controller.php');
 
     if (!isLoggedIn()) logOut();
-    
     $users = getAccounts();
 ?>
  <!DOCTYPE html>
@@ -411,7 +410,7 @@
                 <script type="text/javascript">
                             savingResult = '<?php echo isset($_REQUEST['result']) ? $_REQUEST['result'] : ''; ?>';
                             if (savingResult == 'BAD') {
-                                alert('The email is already exist.');
+                                alert('The email already exists!');
                                 $('#email').focus().select();
                             }
 
@@ -430,9 +429,9 @@
                             }
         
                             function logOut() {
-                                if (confirm ('Are you sure want to log out?')) {
+                               // if (confirm ('Are you sure want to log out?')) {
                                     window.open('controller.php?flag=logout', '_self');
-                                }
+                               // }
                             }
 
                         </script>

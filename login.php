@@ -10,7 +10,7 @@
         <link rel="shortcut icon" href="assets/images/favicon.ico">
 
         <!-- App title -->
-        <title>Uplon - Responsive Admin Dashboard Template</title>
+        <title>US Tech Backup Database</title>
 
         <!-- App CSS -->
         <link href="template-assets/css/style.css" rel="stylesheet" type="text/css" />
@@ -52,6 +52,17 @@
                             <div class="col-xs-12 text-xs-center">
                                 <h6 class="text-muted text-uppercase m-b-0 m-t-0">Sign In</h6>
                             </div>
+                            <?php 
+                            if (isset($_REQUEST['result'])) {
+                            	if ($_REQUEST['result'] == 'BAD') {
+                            		echo '
+                            		  <div class="col-xs-12 text-xs-center">
+		                                <h7 class="text-muted text-uppercase m-b-0 m-t-0" style="color: darkred;text-transform: none!important;">Email or password incorrect.</h7>
+		                          </div>
+		                        ';
+                            	}
+                            }
+                            ?>
                         </div>
                         <form class="m-t-20" id="dataform" action="controller.php?flag=login" method="POST">
 
@@ -70,7 +81,7 @@
                             <div class="form-group row">
                                 <div class="col-xs-12">
                                     <div class="checkbox checkbox-custom">
-                                        <input id="checkbox-signup" type="checkbox">
+                                        <input id="checkbox-signup" name="remember" type="checkbox">
                                         <label for="checkbox-signup">
                                             Remember me
                                         </label>
@@ -152,7 +163,7 @@
         <script src="template-assets/js/jquery.app.js"></script>
 
         <script type="text/javascript">
-            loginResult = '<?php echo isset($_REQUEST['result']) ? $_REQUEST['result'] : ''; ?>';
+            /*loginResult = '<?php echo isset($_REQUEST['result']) ? $_REQUEST['result'] : ''; ?>';
             
             if (loginResult == 'BAD_EMAIL' || loginResult == 'BAD_PWD') {
                 $('#email').val("<?php echo isset($_REQUEST['email']) ? $_REQUEST['email'] : ''; ?>");
@@ -162,13 +173,13 @@
                 $('#email').addClass('error-border');//.focus().select();
             } else if (loginResult == 'BAD_PWD') {
                 $('#password').addClass('error-border');//.focus().select();
-            }
+            }*/
             $(document).ready(function () {
                 // $('#email').focus().select();
-                $('#email,#password').blur(function () {
+                /*$('#email,#password').blur(function () {
                     if ($(this).val() != '') $(this).removeClass('error-border');
                     else $(this).addClass('error-border');
-                });
+                });*/
             });
         </script>
     </body>

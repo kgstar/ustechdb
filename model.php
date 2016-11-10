@@ -1,20 +1,14 @@
 <?php 
 	function logIn ($email, $password) {
-		$sql = "SELECT COUNT(*) AS cnt FROM accounts WHERE email = :email"; 
-    	$stmt = query($sql, array(':email' => $email));
-    	$row = $stmt->fetch(PDO::FETCH_ASSOC);
-    	if ($row['cnt'] > 0) {
-    		$sql = "SELECT COUNT(*) AS cnt FROM accounts WHERE email = :email AND password = :password"; 
+		$sql = "SELECT COUNT(*) AS cnt FROM accounts WHERE email = :email AND password = :password"; 
 	    	$stmt = query($sql, array(':email' => $email, ':password' => $password));
+	    	
 	    	$row = $stmt->fetch(PDO::FETCH_ASSOC);
 	    	if ($row['cnt'] > 0) {
-	    		return 'OK';
+	   		return 'OK';
 	    	} else {
-	    		return 'BAD_PWD';
+	    		return 'BAD';
 	    	}
-    	} else {
-    		return 'BAD_EMAIL';
-    	}
 	}
 
 	function resetPassword ($email) {
@@ -26,7 +20,7 @@
 	}
 
 	function isLoggedIn () {
-		if (isset($_COOKIE['email'])) {
+		if (isset($_COOKIE['cookie_email'])) {
 			return true;
 		} else {
 			return false;
@@ -35,14 +29,9 @@
 	}
 
 	function logOut () {
-		$email = $_COOKIE['email'];
-
-		unset($_COOKIE['email']);
-		setcookie("email", "", time() - 3600);
-		unset($_COOKIE['password']);
-		setcookie("password", "", time() - 3600);
-
-		header('Location: login.php?email=' . $email);
+		unset($_COOKIE['cookie_email']);
+		setcookie("cookie_email", "", time() - 3600);
+		header('Location: login.php');
 	}
 
 	function getProfiles ($pageNum = 1, $keyword = '') {
@@ -56,11 +45,14 @@
     	}
     	$rowCount = 10;
     	$sql = "
-			SELECT id, full_name, email, phone, location, country 
+		SELECT * FROM (
+			SELECT id, full_name, email, phone, location, country, source, DATE(created_at) AS created_at, uploaded_by  
 			FROM profiles 
 			" . $where . " 
 			ORDER BY full_name 
 			LIMIT ".(($pageNum * 1 - 1) * $rowCount).", ".$rowCount." 
+		) AS A 
+		LEFT OUTER JOIN (SELECT full_name as full_user_name, id AS user_id FROM users) AS B ON A.uploaded_by=B.user_id 
 		"; 
 
     	$stmt = query($sql, array(':q' => '%'.$keyword.'%'));
@@ -78,6 +70,10 @@
 				SELECT id AS attachment_id, profile_id 
 				FROM attachments 
 			) AS B ON A.id=B.profile_id
+			LEFT OUTER JOIN (
+				SELECT id AS user_id, full_name AS download_by  
+				FROM users 
+			) AS C ON A.uploaded_by=C.user_id
 		"; 
 
     	$stmt = query($sql, array(':id' => $profileId));
@@ -106,11 +102,10 @@
 
     function addAccount ($fullName, $email, $status, $password) {
     	$sql = "
-			SELECT COUNT(*) AS cnt
+			SELECT COUNT(*) AS cnt 
 			FROM accounts 
 			WHERE email = :email
 		"; 
-
     	$stmt = query($sql, array(':email' => $email));
     	$row = $stmt->fetch(PDO::FETCH_ASSOC);
     	if ($row['cnt'] > 0) {

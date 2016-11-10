@@ -9,16 +9,17 @@
     case 'login':
       $result = logIn($_REQUEST['email'], $_REQUEST['password']);
       if ($result == 'OK') {
-        $term = 86400 * 365;
-        setcookie('email', $_REQUEST['email'], time() + $term, "/");
-        setcookie('pwd', $_REQUEST['password'], time() + $term, "/");
+      	$term = 86400 * 365;
+      	if ($_REQUEST['remember'] == true) {
+        	setcookie("cookie_email", $_REQUEST["email"], time() + $term, "/", $_SERVER['HTTP_HOST'], false, true);	
+        } else {
+        	setcookie("cookie_email", $_REQUEST["email"], 0, "/", $_SERVER['HTTP_HOST'], false, true);	
+        }
+        
+       	header('Location: index.php');
 
-        header('Location: index.php');
-
-      } else if ($result == 'BAD_EMAIL' || $result == 'BAD_PWD') {
-        header('Location: login.php?email=' . $_REQUEST['email'] . '&password=' . $_REQUEST['password'] . '&result=' . $result);
       } else {
-
+        header('Location: login.php?result=' . $result);
       }
       exit; 
 
@@ -29,7 +30,7 @@
     case 'reset_password':
       $result = resetPassword($_REQUEST['email']);
       if ($result == 'OK') {
-        header('Location: login.php?email=' . $_REQUEST['email'] . '&password=' . $_REQUEST['password'] . '&result=' . $result);
+        header('Location: login.php?result=' . $result);
       } else {
         header('Location: reset.php');
       }

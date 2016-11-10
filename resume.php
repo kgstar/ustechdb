@@ -149,8 +149,8 @@
 
 
                <div class="card-box table-responsive">
-                                           <h4 class="m-t-0 header-title"><b>Default Example</b></h4>
-                                           <br>
+                                           <!-- <h4 class="m-t-0 header-title"><b>Default Example</b></h4>
+                                           <br> -->
                                            <div class="input-group">
                                              <input type="text" class="form-control" placeholder="Search for..." id="keyword" value="<?php echo $keyword; ?>">
                                              <span class="input-group-btn">
@@ -185,9 +185,9 @@
                                                                        <td>'.$profile['email'].'</td>
                                                                        <td>'.$profile['phone'].'</td>
                                                                        <td>'.$profile['location'].'</td>
-                                                                       <td>'.$profile['country'].'</td>
-                                                                       <td></td>
-                                                                       <td></td>
+                                                                       <td>'.$profile['source'].'</td>
+                                                                       <td>'.$profile['full_user_name'].'</td>
+                                                                       <td>'.$profile['created_at'].'</td>
                                                                        <td class="text-center">
                                                                          <a href="view-resume.php?profile_id='.$profile['id'].'" class=""><i class="fa fa-eye"></i></a>
                                                                        </td>
@@ -410,16 +410,16 @@
                     function doSearch () {
                         var keyword = $('#keyword').val();
                         if (keyword != '') {
-                        window.open('resume.php?p=<?php echo $pageNum; ?>&q=' + keyword, '_self');
+                        window.open('resume.php?p=1&q=' + keyword, '_self');
                         } else {
                             $('#keyword').focus().select();
                         }
                     }
         
                     function logOut() {
-                        if (confirm ('Are you sure want to log out?')) {
+                        //if (confirm ('Are you sure want to log out?')) {
                             window.open('controller.php?flag=logout', '_self');
-                        }
+                        //}
                     }
 
                     </script>

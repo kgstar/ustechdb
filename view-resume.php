@@ -167,13 +167,13 @@
 
                     <div class="row">
                       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                            <h4>Sr Web Developer</h4>
+                            <h4><?php echo $profile['full_name']; ?></h4>
                         
                       </div> <!-- col --> 
 
                       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
                             <a href="javascript:downloadResume(<?php echo $profile['attachment_id']; ?>);" class="btn btn-primary<?php echo $profile['attachment_id'] * 1 == 0 ? ' disabled' : ''; ?>">Download Resume</a>
-                            <a href="resume.php" type="button" class="btn btn-success">Back to Resume Listing</a>
+                            <a href="javascript:goToList();" type="button" class="btn btn-success">Back to Resume Listing</a>
                         
                       </div> <!-- col -->
 
@@ -197,7 +197,7 @@
                                         </td>
                                         
                                         <td>
-                                           <?php echo $profile['full_name']; ?>
+                                           <?php echo $profile['download_by']; ?>
                                         </td>
                                         
                                     </tr>
@@ -208,7 +208,7 @@
                                         </td>
                                         
                                         <td>
-                                           <?php echo $profile['phone']; ?>
+                                           <?php echo $profile['source']; ?>
                                         </td>
                                         
                                     </tr>
@@ -543,15 +543,20 @@
                             } );
         
                             function logOut() {
-                                if (confirm ('Are you sure want to log out?')) {
+                              //  if (confirm ('Are you sure want to log out?')) {
                                     window.open('controller.php?flag=logout', '_self');
-                                }
+                              //  }
                             }
                             
                             function downloadResume (attachmentId) {
                                 url = 'controller.php?flag=download_resume';
                                 url += '&attachment_id=' + attachmentId;
                                 window.location.assign(url); 
+                            }
+                            
+                            function goToList() {
+                            	url = document.referrer ? document.referrer : 'resume.php';
+                            	window.open(url, '_self');
                             }
                         </script>
         
